@@ -48,6 +48,10 @@ def _active_bundles
   Java::com.droiuby.client.core.ExecutionBundleFactory.listActiveBundles.collect { |i| i.to_s }
 end
 
+def _errors
+  _execution_bundle.getScriptErrors.collect { |i| i.to_s }
+end
+
 def _switch(bundle)
   bundle = Java::com.droiuby.client.core.ExecutionBundleFactory.getBundle(bundle)
   $container_payload = bundle.getPayload
