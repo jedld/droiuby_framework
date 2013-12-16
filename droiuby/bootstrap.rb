@@ -55,6 +55,12 @@ end
 def _switch(bundle)
   bundle = Java::com.droiuby.client.core.ExecutionBundleFactory.getBundle(bundle)
   $container_payload = bundle.getPayload
+  true
+end
+
+def on_ui_thread(&block)
+  _current_activity.runOnUiThread(RunnableWrapper.new(&block).to_native);
+  nil 
 end
 
 def _namespace
