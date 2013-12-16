@@ -2,7 +2,7 @@ class RunnableWrapper
   
   def initialize(block)
     @block = block
-    @native = Java::com.droiuby.client.core.wrappers.RunnableRubyWrapper.new(_execution_bundle,self)
+    @native = Java::com.droiuby.wrappers.RunnableRubyWrapper.new(_execution_bundle,self)
   end
   
   def run

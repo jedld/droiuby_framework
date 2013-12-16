@@ -59,7 +59,7 @@ def _switch(bundle)
 end
 
 def on_ui_thread(&block)
-  _current_activity.runOnUiThread(RunnableWrapper.new(&block).to_native);
+  _current_activity.runOnUiThread(RunnableWrapper.new(block).to_native);
   nil 
 end
 
