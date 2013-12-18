@@ -2,6 +2,8 @@ require 'droiuby/wrappers/view_wrapper'
 
 class EditTextWrapper < ViewWrapper
   
+  java_attr_accessor :hint
+  
   def text=(text)
       @view.setText(text)
   end
