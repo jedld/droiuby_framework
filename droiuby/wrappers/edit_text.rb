@@ -1,6 +1,6 @@
 require 'droiuby/wrappers/view_wrapper'
 
-class EditTextWrapper < ViewWrapper
+class EditTextWrapper < TextViewWrapper
   
   java_attr_accessor :hint
   

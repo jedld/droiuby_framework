@@ -84,6 +84,7 @@ class Animator
 
     def start
       @animator_set.start
+      self
     end
 
     def on(event, &block)
