@@ -6,10 +6,10 @@ class PayloadWrapper
   [:getContainer, :getActiveApp, :getExecutionBundle, :getActivityBuilder].each do |method|
     java_native_singleton_on($container_payload, Java::com.droiuby.client.core.RubyContainerPayload, method, [])
   end
-  
-  java_native_singleton_on($container_payload.getExecutionBundle, Java::com.droiuby.client.core.ExecutionBundle, 
-    :getCurrentActivity, [])
-      
+
+  java_native_singleton_on($container_payload.getExecutionBundle, Java::com.droiuby.client.core.ExecutionBundle,
+  :getCurrentActivity, [])
+
 end
 
 def _container_payload
@@ -60,7 +60,7 @@ end
 
 def on_ui_thread(&block)
   _current_activity.runOnUiThread(RunnableWrapper.new(block).to_native);
-  nil 
+  nil
 end
 
 def _namespace
@@ -68,7 +68,7 @@ def _namespace
 end
 
 def launch(url)
-  Java::com.droiuby.client.core.ActivityBuilder.loadApp(_current_activity, url) 
+  Java::com.droiuby.client.core.builder.ActivityBuilder.loadApp(_current_activity, url)
 end
 
 def render(url, params = {})
@@ -76,10 +76,10 @@ def render(url, params = {})
   if params[:method] && (params[:method] == :post)
     http_method = Java::com.droiuby.client.core.utils.Utils::HTTP_POST
   end
-  
+
   new_activity = params[:activity] ? true : false;
-  Java::com.droiuby.client.core.ActivityBuilder.loadLayout(_execution_bundle, _current_app, url,
-    new_activity, http_method, _current_activity, nil, nil, Java::com.droiuby.client.core.ActivityBuilder.getViewById(_current_activity, 'mainLayout'))
+  Java::com.droiuby.client.core.bulider.ActivityBuilder.loadLayout(_execution_bundle, _current_app, url,
+  new_activity, http_method, _current_activity, nil, nil, Java::com.droiuby.client.core.builder.ActivityBuilder.getViewById(_current_activity, 'mainLayout'))
   #execute plugins
   after_view_setup
 end
@@ -133,30 +133,30 @@ def wrap_native_view(view)
 
   wrapped = if (view.class < Java::android.view.View)
     if (view.class == Java::android.widget.TextView)
-        TextViewWrapper.new(view)
-      elsif (view.class == Java::android.widget.EditText)
-        EditTextWrapper.new(view)
-      elsif (view.class == Java::android.widget.LinearLayout)
-        LinearLayoutWrapper.new(view)
-      elsif (view.class == Java::android.webkit.WebView)
-        WebViewWrapper.new(view)
-      elsif (view.class == Java::android.widget.ListView)
-        ListViewWrapper.new(view)
-      elsif (view.class < Java::android.view.ViewGroup)
-        ViewGroupWrapper.new(view)
-      elsif (view.class < Java::android.widget.CompoundButton)
-        CompoundButtonWrapper.new(view)
-      elsif (view.class < Java::com.droiuby.client.core.wrappers.SurfaceViewWrapper)
-        SurfaceViewWrapper.new(view)
-      elsif (view.class < Java::android.view.View)
-        ViewWrapper.new(view)
-      else
-        view
-     end
+      TextViewWrapper.new(view)
+    elsif (view.class == Java::android.widget.EditText)
+      EditTextWrapper.new(view)
+    elsif (view.class == Java::android.widget.LinearLayout)
+      LinearLayoutWrapper.new(view)
+    elsif (view.class == Java::android.webkit.WebView)
+      WebViewWrapper.new(view)
+    elsif (view.class == Java::android.widget.ListView)
+      ListViewWrapper.new(view)
+    elsif (view.class < Java::android.view.ViewGroup)
+      ViewGroupWrapper.new(view)
+    elsif (view.class < Java::android.widget.CompoundButton)
+      CompoundButtonWrapper.new(view)
+    elsif (view.class < Java::com.droiuby.client.core.wrappers.SurfaceViewWrapper)
+      SurfaceViewWrapper.new(view)
+    elsif (view.class < Java::android.view.View)
+      ViewWrapper.new(view)
+    else
+      view
+    end
   elsif (view.class == Java::android.view.MotionEvent)
     MotionEventsWrapper.new(event)
   end
-  
+
   wrapped
 end
 
@@ -165,7 +165,6 @@ def wrap_native(object)
     return IntentWrapper.new(object)
   end
 end
-
 
 def surface(&block)
   s = SurfaceViewWrapper.new
@@ -190,15 +189,16 @@ def V(selectors = nil)
   else
     view = _activity_builder.findViewByName(selectors)
   end
-  
+
   if (view.kind_of? Java::java.util.ArrayList)
-    view.toArray.to_a.collect do |element|
+    wrapped_views = view.toArray.to_a.collect do |element|
       wrap_native_view(element)
     end
+    ViewArray.new(wrapped_views)
   else
     wrap_native_view(view) if view
   end
-  
+
 end
 
 def _P
@@ -218,19 +218,19 @@ def async_get(url, params = {}, options ={}, &block)
 end
 
 def http_get(url, params = {}, options = {})
-  
+
   encoded_params = []
-    
+
   params.each do |k,v|
     encoded_params << "#{k.to_s}=#{CGI::escape(v.to_s)}"
   end
-  
+
   url_string = url
-  
+
   if encoded_params.size > 0
     url_string = "#{url}?#{encoded_params.join('&')}"
   end
-  
+
   Java::com.droiuby.client.core.utils.Utils.load(_current_activity, url_string, _execution_bundle);
 end
 
@@ -254,16 +254,16 @@ class Activity
   end
 
   def on_activity_result(request_code, result_code, intent)
-    
+
   end
-  
+
   def on_activity_reload
   end
-  
+
   def no_action_bar
     _current_activity.requestWindowFeature(Java::android.view.Window::FEATURE_NO_TITLE);
     nil
   end
-  
+
 end
 

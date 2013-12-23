@@ -1,6 +1,7 @@
 
 require 'java'
 require 'droiuby/support/autoload'
+require 'droiuby/wrappers/collection/view_array'
 require 'droiuby/wrappers/listeners/auto_wrap'
 require 'droiuby/support/string'
 require 'droiuby/support/to_query'

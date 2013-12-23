@@ -1,7 +1,7 @@
 class ListAdapterWrapper
   
   def initialize
-    @native = Java::com.droiuby.client.core.wrappers.ListViewAdapterWrapper.new(_execution_bundle)
+    @native = Java::com.droiuby.wrappers.ListAdapterRubyWrapper.new(_execution_bundle, self)
   end
   
   def native

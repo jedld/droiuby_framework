@@ -21,6 +21,10 @@ class ViewGroupWrapper < ViewWrapper
     end
     after_partial_setup(self)
   end
+  
+  def <<(markup_or_view)
+    append(markup_or_view)
+  end
 
   def to_front!(child = nil)
     if child.nil?
@@ -35,9 +39,10 @@ class ViewGroupWrapper < ViewWrapper
   end
 
   def children
-    (0...self.count).collect { |i|
+    wrapped_views = (0...self.count).collect { |i|
       wrap_native_view(self.child(i))
     }
+    ViewArray.new(wrapped_views)
   end
 
   def child(index)
