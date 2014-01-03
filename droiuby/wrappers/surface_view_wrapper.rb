@@ -43,8 +43,7 @@ class SurfaceViewWrapper < ViewWrapper
     @builder.setContext(_current_activity)
   end
   
-  def on(event,&block)
-    super(event,&block)
+  def on(event, &block)
     case(event.to_sym)
         when :surface_created
           auto_wrap_block = Proc.new { |surface| block.call(SurfaceHolderWrapper.new(surface))}
@@ -52,6 +51,8 @@ class SurfaceViewWrapper < ViewWrapper
         when :surface_destroyed
           auto_wrap_block = Proc.new { |surface| block.call(SurfaceHolderWrapper.new(surface))}
           self.native.setSurfaceDestroyedBlock(auto_wrap_block)
+        else
+          super(event.to_sym, &block)
       end
   end
     
