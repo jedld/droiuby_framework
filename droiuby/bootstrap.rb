@@ -155,6 +155,8 @@ def wrap_native_view(view)
     end
   elsif (view.class == Java::android.view.MotionEvent)
     MotionEventsWrapper.new(view)
+  else
+    view
   end
 
   wrapped

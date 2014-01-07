@@ -19,7 +19,7 @@ class ViewWrapper
     unless view.nil?
       @view = view
     else
-      @view = Java::android.view.View.new(_current_activity)
+      @view = Java::com.droiuby.wrappers.ViewRubyWrapper.new(_execution_bundle, self, _current_activity)
     end
     @builder = Java::com.droiuby.client.core.builder.ViewBuilder.new
     @builder.setContext(_current_activity)
