@@ -25,6 +25,16 @@ class DroiubyFramework
     instance
   end
   
+  def resolve_view(name)
+    klass = name.constantize
+    instance = klass.new
+    if instance < ViewWrapper
+      instance.native
+    else
+      instance
+    end
+  end
+  
 end
 
 $framework = DroiubyFramework.new

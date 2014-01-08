@@ -2,7 +2,7 @@ require 'droiuby/wrappers/view_wrapper'
 
 class ViewGroupWrapper < ViewWrapper
   def inner=(markup)
-    _activity_builder.parsePartialReplaceChildren(@view,markup)
+    _activity_builder.parsePartialReplaceChildren(@view, markup, _execution_bundle)
     after_partial_setup(self)
   end
 
@@ -13,7 +13,7 @@ class ViewGroupWrapper < ViewWrapper
 
   def append(markup_or_view)
     if markup_or_view.kind_of? String
-      _activity_builder.parsePartialAppendChildren(@view,markup_or_view)
+      _activity_builder.parsePartialAppendChildren(@view, markup_or_view, _execution_bundle)
     elsif markup_or_view.kind_of? ViewWrapper
       _activity_builder.appendChild(@view,  markup_or_view.native)
     elsif markup_or_view.kind_of? Java::android.view.View.new
