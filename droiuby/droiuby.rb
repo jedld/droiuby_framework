@@ -25,7 +25,7 @@ class DroiubyFramework
     instance
   end
   
-  def resolve_view(name)
+  def resolve_view(name, node)
     klass = name.constantize
     instance = klass.new
     if instance < ViewWrapper
