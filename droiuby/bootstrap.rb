@@ -68,7 +68,12 @@ def _namespace
 end
 
 def launch(url)
-  Java::com.droiuby.client.core.builder.ActivityBuilder.loadApp(_current_activity, url)
+  Java::com.droiuby.client.core.DroiubyLauncher.launch(_current_activity, url)
+end
+
+def start_web_console(&block)
+  listener = Droiuby::Wrappers::Listeners::OnWebConsoleReadyListener.new(_execution_bundle,block)
+  Java::com.droiuby.client.core.DroiubyLauncher.setupConsole(_execution_bundle, listener)
 end
 
 def render(url, params = {})
@@ -132,7 +137,9 @@ def wrap_native_view(view)
   return nil unless view
 
   wrapped = if (view.class < Java::android.view.View)
-    if (view.class == Java::android.widget.TextView)
+    if (view.class == Java::android.widget.Button)
+      ButtonWrapper.new(view)
+    elsif (view.class == Java::android.widget.TextView)
       TextViewWrapper.new(view)
     elsif (view.class == Java::android.widget.EditText)
       EditTextWrapper.new(view)
