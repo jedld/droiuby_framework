@@ -93,10 +93,19 @@ def render(url, params = {})
   end
 
   new_activity = params[:activity] ? true : false;
-  Java::com.droiuby.client.core.bulider.ActivityBuilder.loadLayout(_execution_bundle, _current_app, url,
-  new_activity, http_method, _current_activity, nil, nil, Java::com.droiuby.client.core.builder.ActivityBuilder.getViewById(_current_activity, 'mainLayout'))
-  #execute plugins
-  after_view_setup
+    
+  async.perform {
+    Java::com.droiuby.client.core.DroiubyLauncher.loadPage(_current_activity, _execution_bundle, url, http_method)
+  }.done { |result|
+    if new_activity
+      Java::com.droiuby.client.core.DroiubyLauncher.startNewActivity(_current_activity, result)
+    else
+      Java::com.droiuby.client.core.DroiubyLauncher.runController(_current_activity, _execution_bundle, page)
+      #execute plugins
+      after_view_setup
+    end
+  }
+
 end
 
 def log_debug(message = '', tag = 'ruby')
