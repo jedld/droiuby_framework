@@ -9,7 +9,9 @@ module Droiuby
         end
         
         def onReady(httpd)
-          @auto_wrap_block.call(httpd)
+          on_ui_thread {
+            @auto_wrap_block.call(httpd)
+          }
         end
         
         def to_native

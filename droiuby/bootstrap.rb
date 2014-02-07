@@ -3,7 +3,7 @@ puts 'initializing bootstrap'
 include JavaMethodHelper::ClassMethods
 
 class PayloadWrapper
-  [:getContainer, :getActiveApp, :getExecutionBundle, :getActivityBuilder].each do |method|
+  [:getContainer, :getActiveApp, :getExecutionBundle, :getActivityBuilder, :getCurrentPage].each do |method|
     java_native_singleton_on($container_payload, Java::com.droiuby.client.core.RubyContainerPayload, method, [])
   end
 
@@ -14,6 +14,10 @@ end
 
 def _container_payload
   $container_payload
+end
+
+def _current_page
+  PayloadWrapper.java_getCurrentPage
 end
 
 def _scripting_container
@@ -73,7 +77,13 @@ end
 
 def start_web_console(&block)
   listener = Droiuby::Wrappers::Listeners::OnWebConsoleReadyListener.new(_execution_bundle,block)
-  Java::com.droiuby.client.core.DroiubyLauncher.setupConsole(_execution_bundle, listener)
+  Java::com.droiuby.client.core.DroiubyLauncher.setupConsole(_execution_bundle, listener.to_native)
+end
+
+def set_content_view(view = nil)
+  if view.nil?
+    Java::com.droiuby.client.core.DroiubyLauncher.setPage(_current_activity, _execution_bundle, _current_page)
+  end
 end
 
 def render(url, params = {})
