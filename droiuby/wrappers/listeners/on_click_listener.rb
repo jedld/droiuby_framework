@@ -2,9 +2,10 @@ module Droiuby
   module Wrappers
     module Listeners
       class OnClickListener
+        
         def initialize(execution_bundle, auto_wrap_block)
           @auto_wrap_block = auto_wrap_block
-          @native = Java::com.droiuby.wrappers::OnClickListenerRubyWrapper.new(execution_bundle, self)
+          @native = ProxyBuilder::InvocationHandler.new("android.view.View.OnClickListener", self).to_native
         end
         
         def onClick(view)

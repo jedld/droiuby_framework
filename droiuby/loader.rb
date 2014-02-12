@@ -2,6 +2,7 @@
 require 'java'
 require 'droiuby/support/autoload'
 require 'droiuby/wrappers/collection/view_array'
+require 'droiuby/wrappers/proxy_builder/interface_builder'
 require 'droiuby/wrappers/listeners/auto_wrap'
 require 'droiuby/wrappers/listeners/on_web_console_ready_listener'
 require 'droiuby/support/string'

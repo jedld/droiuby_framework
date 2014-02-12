@@ -4,7 +4,7 @@ module Droiuby
 
       class AutoWrapBase
         def to_native(klass)
-          eval("Java::com.droiuby.wrappers::#{klass.to_s}RubyWrapper").new(@execution_bundle, self)
+          Droiuby::Wrappers::ProxyBuilder::InvocationHandler.new("android.view.View$#{klass}", self).to_native
         end
       end
       
